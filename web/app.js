@@ -496,5 +496,5 @@
     if (last) search(last.lat, last.lon);
   }
 
-  boot().catch((e) => showStatus(`Couldn’t start Aprieta: ${esc(e.message)}`));
+  boot().catch((e) => showStatus(`Couldn’t start Apprieta: ${esc(e.message)}`));
 })();

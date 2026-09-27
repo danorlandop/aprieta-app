@@ -31,7 +31,7 @@ class ConfirmRequest(BaseModel):
 
 
 def create_app(store: Store | None = None) -> FastAPI:
-    app = FastAPI(title="Aprieta")
+    app = FastAPI(title="Apprieta")
     app.state.store = store or Store()
 
     def get_store() -> Store:
@@ -180,12 +180,12 @@ def main() -> None:
     import uvicorn
 
     load_dotenv(Path(__file__).resolve().parent.parent / ".env")
-    parser = argparse.ArgumentParser(description="Aprieta: find a bathroom, fast")
+    parser = argparse.ArgumentParser(description="Apprieta: find a bathroom, fast")
     parser.add_argument("--host", default=os.getenv("APRIETA_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.getenv("PORT", "8430")))
     args = parser.parse_args()
     mode = "DEMO payments (no Stripe key set)" if payments.demo_mode() else "live Stripe payments"
-    print(f"Aprieta running at http://{args.host}:{args.port} with {mode}")
+    print(f"Apprieta running at http://{args.host}:{args.port} with {mode}")
     uvicorn.run(create_app(), host=args.host, port=args.port, log_level="info")
 
 

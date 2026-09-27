@@ -57,11 +57,11 @@ def create_stripe_session(
     stripe.api_key = stripe_key()
     lines = []
     if kind == "pass":
-        lines.append(_line(pricing, pricing.pass_cents, f"Aprieta {pricing.pass_hours:g}-hour pass: every bathroom address"))
+        lines.append(_line(pricing, pricing.pass_cents, f"Apprieta {pricing.pass_hours:g}-hour pass: every bathroom address"))
     elif kind == "single":
-        lines.append(_line(pricing, pricing.single_cents, "Aprieta: unlock one bathroom address"))
+        lines.append(_line(pricing, pricing.single_cents, "Apprieta: unlock one bathroom address"))
     if boxers or kind == "boxers":
-        lines.append(_line(pricing, pricing.boxers_cents, "Aprieta: nearest places to buy fresh underwear"))
+        lines.append(_line(pricing, pricing.boxers_cents, "Apprieta: nearest places to buy fresh underwear"))
     session = stripe.checkout.Session.create(
         mode="payment",
         line_items=lines,

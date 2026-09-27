@@ -1,6 +1,6 @@
 {
-  "name": "Aprieta",
-  "short_name": "Aprieta",
+  "name": "Apprieta",
+  "short_name": "Apprieta",
   "description": "Find the nearest bathroom, fast.",
   "start_url": "/",
   "display": "standalone",

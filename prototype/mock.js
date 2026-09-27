@@ -1,4 +1,4 @@
-// Prototype stand-in for the Aprieta server: same API, sample data, nothing charged.
+// Prototype stand-in for the Apprieta server: same API, sample data, nothing charged.
 (() => {
   const HOME = { lat: 49.2820, lon: -123.1207 };
   const raw = [

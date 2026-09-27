@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#6b4226">
-<title>Aprieta prototype</title>
+<title>Apprieta prototype</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 <style>/* required styles */
 
@@ -994,7 +994,7 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
   <header class="topbar">
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#toilet"/></svg>
-      <span>aprieta</span>
+      <span>apprieta</span>
     </div>
     <div id="pass-chip" class="chip chip-pass" hidden></div>
     <div id="demo-chip" class="chip chip-demo" hidden title="No Stripe key configured: payments are simulated">Demo payments</div>
@@ -1013,23 +1013,23 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
       <p class="proto-note">Prototype: sample bathrooms in downtown Vancouver, payments simulated.</p>
       <div id="welcome" class="welcome">
         <h1>¿Te aprieta?</h1>
-        <p class="tagline">Aprieta, la app que te saca aprietos.</p>
+        <p class="tagline">Apprieta, la app que te saca aprietos.</p>
         <button id="find" class="big-btn">Find a bathroom near me</button>
         <p class="fine">Or move the map and tap “Search this area”.</p>
         <section class="testimonials" aria-label="What people say">
           <figure class="testimonial">
             <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
-            <blockquote>“I had to beg in Amsterdam to be able to poop. Otherwise, I would have had to buy new boxers. Aprieta got me out of this.”</blockquote>
+            <blockquote>“I had to beg in Amsterdam to be able to poop. Otherwise, I would have had to buy new boxers. Apprieta got me out of this.”</blockquote>
             <figcaption><span class="avatar" aria-hidden="true">S</span><span><strong>Santiago Manotas</strong> · Amsterdam</span></figcaption>
           </figure>
           <figure class="testimonial">
             <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
-            <blockquote>“I don’t know what I would have been able to do without Aprieta when I was in Madrid.”</blockquote>
+            <blockquote>“I don’t know what I would have been able to do without Apprieta when I was in Madrid.”</blockquote>
             <figcaption><span class="avatar" aria-hidden="true">P</span><span><strong>Paola</strong> · Madrid</span></figcaption>
           </figure>
           <figure class="testimonial">
             <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
-            <blockquote>“Two hours into the line at the Louvre, it hit me. Aprieta found a café bathroom three minutes away. The Mona Lisa could wait. I couldn’t.”</blockquote>
+            <blockquote>“Two hours into the line at the Louvre, it hit me. Apprieta found a café bathroom three minutes away. The Mona Lisa could wait. I couldn’t.”</blockquote>
             <figcaption><span class="avatar" aria-hidden="true">M</span><span><strong>Marcela</strong> · Paris</span></figcaption>
           </figure>
         </section>
@@ -1292,7 +1292,7 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
   };
 })();
 </script>
-<script>// Prototype stand-in for the Aprieta server: same API, sample data, nothing charged.
+<script>// Prototype stand-in for the Apprieta server: same API, sample data, nothing charged.
 (() => {
   const HOME = { lat: 49.2820, lon: -123.1207 };
   const raw = [
@@ -1883,7 +1883,7 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
     if (last) search(last.lat, last.lon);
   }
 
-  boot().catch((e) => showStatus(`Couldn’t start Aprieta: ${esc(e.message)}`));
+  boot().catch((e) => showStatus(`Couldn’t start Apprieta: ${esc(e.message)}`));
 })();
 </script>
 </body>

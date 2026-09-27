@@ -1,4 +1,4 @@
-# Aprieta
+# Apprieta
 
 **¿Te aprieta?** Find the nearest bathroom, fast. The list is free to browse.
 The exact address costs a small one-time payment.
