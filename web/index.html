@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff5a36">
+  <title>Aprieta</title>
+  <meta name="description" content="Find the nearest bathroom, fast.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#drop"/></svg>
+      <span>aprieta</span>
+    </div>
+    <div id="pass-chip" class="chip chip-pass" hidden></div>
+    <div id="demo-chip" class="chip chip-demo" hidden title="No Stripe key configured: payments are simulated">Demo payments</div>
+  </header>
+
+  <main class="layout">
+    <div id="map" class="map" aria-label="Map of nearby bathrooms"></div>
+    <button id="search-area" class="pill-btn search-area" hidden>Search this area</button>
+    <button id="locate" class="locate-btn" aria-label="Go to my location" title="My location">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    </button>
+
+    <section class="sheet" id="sheet">
+      <div class="sheet-handle" aria-hidden="true"></div>
+
+      <div id="welcome" class="welcome">
+        <h1>¿Te aprieta?</h1>
+        <p>Find the nearest bathroom in seconds.</p>
+        <button id="find" class="big-btn">Find a bathroom near me</button>
+        <p class="fine">Or move the map and tap “Search this area”.</p>
+      </div>
+
+      <div id="status" class="status" hidden></div>
+
+      <div id="results" hidden>
+        <div class="results-head">
+          <h2 id="results-title">Nearby</h2>
+          <div class="filters" role="group" aria-label="Filters">
+            <button class="filter" data-filter="free" aria-pressed="false">Free</button>
+            <button class="filter" data-filter="wheelchair" aria-pressed="false">♿ Accessible</button>
+            <button class="filter" data-filter="public" aria-pressed="false">Public only</button>
+          </div>
+        </div>
+        <section id="boxers-section" class="boxers-section" hidden>
+          <h3>Fresh boxers nearby</h3>
+          <ol id="boxers-list" class="list"></ol>
+        </section>
+        <ol id="list" class="list"></ol>
+        <div id="pass-upsell" class="upsell" hidden>
+          <div>
+            <strong>Out and about all day?</strong>
+            <span id="upsell-text">Unlock every address for 24 hours.</span>
+          </div>
+          <button class="pill-btn" data-buy-pass>Get pass</button>
+        </div>
+        <p class="attribution">Bathroom data © OpenStreetMap contributors. Spot a wrong one? Fix it at openstreetmap.org.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Paywall -->
+  <div id="paywall" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card">
+      <button class="modal-x" data-close aria-label="Close">×</button>
+
+      <div id="pw-choose">
+        <div class="pw-lock">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.2" fill="none"/></svg>
+        </div>
+        <h2 id="paywall-title">Unlock the address</h2>
+        <p id="pw-summary" class="pw-summary"></p>
+        <label class="pw-addon" id="pw-addon" hidden>
+          <input type="checkbox" id="addon-boxers">
+          <span class="pw-addon-icon" aria-hidden="true">🩲</span>
+          <span class="pw-addon-text">
+            <strong>Add backup boxers</strong>
+            <span>Nearest underwear, in case you don’t make it. <span id="addon-desc"></span></span>
+          </span>
+          <span class="pw-addon-price" id="addon-price"></span>
+        </label>
+        <div class="pw-options">
+          <button class="pw-option" data-kind="single">
+            <span class="pw-option-title">This bathroom</span>
+            <span class="pw-option-desc">Exact address + directions</span>
+            <span class="pw-price" id="price-single"></span>
+          </button>
+          <button class="pw-option pw-option-best" data-kind="pass">
+            <span class="pw-badge">Best value</span>
+            <span class="pw-option-title" id="pass-title">24-hour pass</span>
+            <span class="pw-option-desc">Every bathroom, everywhere</span>
+            <span class="pw-price" id="price-pass"></span>
+          </button>
+        </div>
+        <p class="fine">One-time payment. No account, no subscription.</p>
+        <button class="pw-toolate" id="pw-toolate" hidden>Too late? Find new boxers nearby →</button>
+      </div>
+
+      <div id="pw-boxers" hidden>
+        <div class="pw-lock pw-lock-boxers" aria-hidden="true">🩲</div>
+        <h2>Too late? It happens.</h2>
+        <p class="pw-summary">Skip the bathroom. Here’s where to get fresh underwear, fast.</p>
+        <ol id="pw-boxers-list" class="pw-store-list"></ol>
+        <button class="big-btn" id="buy-boxers"></button>
+        <button class="pw-toolate" id="pw-back">← Back to bathrooms</button>
+      </div>
+
+      <form id="pw-demo" hidden>
+        <h2>Checkout</h2>
+        <p class="demo-note">Demo mode: no real card is charged. Add a Stripe key on the server to take real payments.</p>
+        <label>Card number<input inputmode="numeric" value="4242 4242 4242 4242" autocomplete="off"></label>
+        <div class="row">
+          <label>Expiry<input value="12 / 34" autocomplete="off"></label>
+          <label>CVC<input value="123" autocomplete="off"></label>
+        </div>
+        <button type="submit" class="big-btn" id="demo-pay">Pay</button>
+      </form>
+
+      <div id="pw-busy" class="pw-busy" hidden>
+        <div class="spinner"></div>
+        <p id="pw-busy-text">Opening secure checkout…</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden role="status"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="drop" viewBox="0 0 32 32">
+      <path d="M16 2C16 2 5 14.5 5 21a11 11 0 0 0 22 0C27 14.5 16 2 16 2z" fill="currentColor"/>
+      <path d="M11 21.5a5 5 0 0 0 5 5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85"/>
+    </symbol>
+  </svg>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

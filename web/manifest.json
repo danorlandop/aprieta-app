@@ -1,0 +1,12 @@
+{
+  "name": "Aprieta",
+  "short_name": "Aprieta",
+  "description": "Find the nearest bathroom, fast.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8f3",
+  "theme_color": "#ff5a36",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
