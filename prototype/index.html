@@ -781,6 +781,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .welcome h1 { font-size: 34px; letter-spacing: -1px; margin: 4px 0 2px; }
 .welcome p { color: var(--ink-2); margin: 0 0 18px; }
 .fine { font-size: 13px; color: var(--ink-2); }
+.welcome .tagline { font-weight: 600; color: var(--brand); font-style: italic; }
 .welcome .fine { margin-top: 12px; }
 
 .big-btn {
@@ -964,6 +965,21 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
 .pin-store { background: #8b5cf6; }
 .pin-store span { font-size: 14px; }
 
+/* Welcome testimonials */
+.testimonials { display: grid; gap: 10px; margin-top: 22px; text-align: left; }
+.testimonial {
+  margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 14px; display: grid; gap: 8px;
+}
+.testimonial .stars { color: #e0a526; letter-spacing: 2px; font-size: 15px; }
+.testimonial blockquote { margin: 0; font-size: 15px; line-height: 1.45; }
+.testimonial figcaption { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
+.testimonial figcaption strong { color: var(--ink); }
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand); font-weight: 800; font-size: 13px;
+}
+
 .map-label { position: absolute; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; font: 500 11px/1 Roboto, Arial, sans-serif; color: #5f6368; text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 3px #fff; }
 .map-label-area { font-size: 11px; letter-spacing: 1.5px; color: #70757a; }
 .map-label-water { font-style: italic; color: #3a78b5; text-shadow: none; font-size: 12px; }
@@ -997,9 +1013,26 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
       <p class="proto-note">Prototype: sample bathrooms in downtown Vancouver, payments simulated.</p>
       <div id="welcome" class="welcome">
         <h1>¿Te aprieta?</h1>
-        <p>Find the nearest bathroom in seconds.</p>
+        <p class="tagline">Aprieta, la app que te saca aprietos.</p>
         <button id="find" class="big-btn">Find a bathroom near me</button>
         <p class="fine">Or move the map and tap “Search this area”.</p>
+        <section class="testimonials" aria-label="What people say">
+          <figure class="testimonial">
+            <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
+            <blockquote>“I had to beg in Amsterdam to be able to poop. Otherwise, I would have had to buy new boxers. Aprieta got me out of this.”</blockquote>
+            <figcaption><span class="avatar" aria-hidden="true">S</span><span><strong>Santiago Manotas</strong> · Amsterdam</span></figcaption>
+          </figure>
+          <figure class="testimonial">
+            <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
+            <blockquote>“I don’t know what I would have been able to do without Aprieta when I was in Madrid.”</blockquote>
+            <figcaption><span class="avatar" aria-hidden="true">P</span><span><strong>Paola</strong> · Madrid</span></figcaption>
+          </figure>
+          <figure class="testimonial">
+            <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
+            <blockquote>“Two hours into the line at the Louvre, it hit me. Aprieta found a café bathroom three minutes away. The Mona Lisa could wait. I couldn’t.”</blockquote>
+            <figcaption><span class="avatar" aria-hidden="true">M</span><span><strong>Marcela</strong> · Paris</span></figcaption>
+          </figure>
+        </section>
       </div>
 
       <div id="status" class="status" hidden></div>
