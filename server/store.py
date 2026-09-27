@@ -41,7 +41,11 @@ CREATE TABLE IF NOT EXISTS passes (
 
 class Store:
     def __init__(self, path: str | Path | None = None):
-        path = Path(path or os.getenv("APRIETA_DB") or DEFAULT_DB)
+        # Vercel's disk is read-only apart from /tmp, which is wiped between cold
+        # starts, so purchases there don't last. Fine for a demo; use a hosted
+        # database before taking real payments on Vercel.
+        default = Path("/tmp/aprieta.db") if os.getenv("VERCEL") else DEFAULT_DB
+        path = Path(path or os.getenv("APRIETA_DB") or default)
         if str(path) != ":memory:":
             path.parent.mkdir(parents=True, exist_ok=True)
         self._db = sqlite3.connect(str(path), check_same_thread=False)
