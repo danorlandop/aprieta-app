@@ -29,6 +29,7 @@
     return c;
   }
   const onStreetLand = (p) => inside(p, downtown) && !inside(p, stanley) && !inside(p, granvilleIsland);
+  window.vancouverLand = onStreetLand;
 
   // Local metres around downtown so the rotated grid is square.
   const O = [49.2820, -123.1207], MX = 72700, MY = 111320;

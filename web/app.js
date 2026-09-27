@@ -14,6 +14,7 @@
     demoCheckoutId: null,
   };
   const LAST_KEY = "aprieta:last";
+  const LIST_LIMIT = 40; // cards in the list; the map shows every result
 
   // ---------- helpers ----------
 
@@ -94,8 +95,8 @@
   }
 
   function pinIcon(b, rank) {
-    const cls = ["pin", b.locked ? "pin-locked" : "", b.id === state.activeId ? "is-active" : ""].join(" ");
-    return L.divIcon({ className: "", html: `<div class="${cls}"><span>${rank}</span></div>`, iconSize: [30, 30], iconAnchor: [15, 30] });
+    const cls = ["poo", b.locked ? "poo-locked" : "", b.id === state.activeId ? "is-active" : ""].join(" ");
+    return L.divIcon({ className: "", html: `<div class="${cls}" title="${rank}">💩</div>`, iconSize: [30, 30], iconAnchor: [15, 15] });
   }
 
   function renderMarkers(list) {
@@ -104,12 +105,13 @@
     list.forEach((b, i) => {
       const lat = b.locked ? b.approx_lat : b.lat;
       const lon = b.locked ? b.approx_lon : b.lon;
-      if (b.locked) {
+      if (b.locked && list.length <= 15) {
         // Locked bathrooms only show a fuzzy area, never the exact spot.
         L.circle([lat, lon], { radius: b.approx_radius_m, color: "#8a756c", weight: 1, dashArray: "4 4", fillOpacity: 0.06 }).addTo(markerLayer);
       }
       const m = L.marker([lat, lon], { icon: pinIcon(b, i + 1) }).addTo(markerLayer);
-      m.on("click", () => focusCard(b.id, true));
+      // Pins past the list cut-off have no card to jump to, so go straight to unlocking.
+      m.on("click", () => (i >= LIST_LIMIT && b.locked ? openPaywall(b.id) : focusCard(b.id, true)));
       markers.set(b.id, { marker: m, bathroom: b, rank: i + 1 });
     });
   }
@@ -130,7 +132,7 @@
 
   function fitNearest(lat, lon) {
     const pts = visible().slice(0, 3).map((b) => (b.locked ? [b.approx_lat, b.approx_lon] : [b.lat, b.lon]));
-    if (!pts.length) return;
+    if (!pts.length) return flyTo(lat, lon, 16);
     ignoreMove = true;
     map.fitBounds(L.latLngBounds([[lat, lon], ...pts]), { padding: [60, 60], maxZoom: 17 });
   }
@@ -179,7 +181,7 @@
         $("#find").disabled = false;
         const { latitude: lat, longitude: lon } = pos.coords;
         setMe(lat, lon);
-        flyTo(lat, lon, 16);
+        // No zoom here: a zoom still animating when results arrive would swallow fitNearest's.
         search(lat, lon, { fit: true });
       },
       () => {
@@ -282,7 +284,8 @@
     const n = list.length;
     $("#results-title").textContent = n ? `${n} bathroom${n === 1 ? "" : "s"} nearby` : "Nearby";
     $("#list").innerHTML = n
-      ? list.map((b, i) => `<li class="card${b.id === state.activeId ? " is-active" : ""}" data-id="${esc(b.id)}">${cardHtml(b, i + 1)}</li>`).join("")
+      ? list.slice(0, LIST_LIMIT).map((b, i) => `<li class="card${b.id === state.activeId ? " is-active" : ""}" data-id="${esc(b.id)}">${cardHtml(b, i + 1)}</li>`).join("")
+      + (n > LIST_LIMIT ? `<li class="empty">Showing the closest ${LIST_LIMIT}. The other ${n - LIST_LIMIT} are 💩 on the map.</li>` : "")
       : `<li class="empty">${state.bathrooms.length ? "Nothing matches those filters." : "No bathrooms mapped here yet. Try zooming out and searching again."}</li>`;
     renderMarkers(list);
 

@@ -5,6 +5,7 @@ only ever leaves the server through `full_view`, which routes call after
 checking the caller has paid. `teaser_view` is what everyone else gets.
 """
 
+import hashlib
 import math
 import os
 import time
@@ -63,12 +64,20 @@ def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2 * r * math.asin(math.sqrt(a))
 
 
+def everything_is_a_bath() -> bool:
+    """Just-for-fun mode: every restaurant and hotel shows up as a "Bath".
+    On by default; set APRIETA_EVERYTHING_IS_A_BATH=0 for real bathrooms only."""
+    return os.getenv("APRIETA_EVERYTHING_IS_A_BATH", "1") != "0"
+
+
 def _overpass_query(lat: float, lon: float, radius_m: int) -> str:
     around = f"(around:{radius_m},{lat},{lon})"
+    fun = f'nwr["amenity"="restaurant"]{around};nwr["tourism"="hotel"]{around};' if everything_is_a_bath() else ""
     return (
-        "[out:json][timeout:20];("
+        "[out:json][timeout:25];("
         f'nwr["amenity"="toilets"]{around};'
         f'nwr["toilets"="yes"]["amenity"]{around};'
+        f"{fun}"
         ");out center tags;"
     )
 
@@ -161,6 +170,8 @@ def kind_of(tags: dict) -> str:
         return "Public restroom"
     if tags.get("amenity") == "pharmacy":
         return "Pharmacy"
+    if everything_is_a_bath() and (tags.get("amenity") == "restaurant" or tags.get("tourism") == "hotel"):
+        return "Bath"
     if tags.get("shop") in STORE_LABELS:
         return STORE_LABELS[tags["shop"]]
     return VENUE_LABELS.get(tags.get("amenity", ""), "Business")
@@ -187,14 +198,21 @@ def address_from_tags(tags: dict) -> str | None:
     return ", ".join(parts) or None
 
 
+def _spread(place_id: str, axis: int) -> float:
+    """Where in its grid cell a locked pin sits (0.1-0.9). Derived from the id alone,
+    not the true position, so pins in the same cell spread out without leaking anything."""
+    digest = hashlib.sha256(f"{place_id}:{axis}".encode()).digest()
+    return 0.1 + 0.8 * digest[0] / 255
+
+
 def teaser_view(place: dict, user_lat: float, user_lon: float) -> dict:
     dist = haversine_m(user_lat, user_lon, place["lat"], place["lon"])
     return {
         "id": place["id"],
         "locked": True,
         "distance_m": max(DISTANCE_BUCKET_M, round(dist / DISTANCE_BUCKET_M) * DISTANCE_BUCKET_M),
-        "approx_lat": (math.floor(place["lat"] / GRID_DEG) + 0.5) * GRID_DEG,
-        "approx_lon": (math.floor(place["lon"] / GRID_DEG) + 0.5) * GRID_DEG,
+        "approx_lat": (math.floor(place["lat"] / GRID_DEG) + _spread(place["id"], 0)) * GRID_DEG,
+        "approx_lon": (math.floor(place["lon"] / GRID_DEG) + _spread(place["id"], 1)) * GRID_DEG,
         "approx_radius_m": 200,
         **features(place["tags"]),
     }

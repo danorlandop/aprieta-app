@@ -21,6 +21,26 @@
     [49.2772, -123.1300, { shop: "department_store", name: "West End Department Store", "addr:street": "Davie St", "addr:housenumber": "1000" }],
   ];
   const stores = rawStores.map(([lat, lon, tags], i) => ({ id: `node-${2000 + i}`, lat, lon, tags }));
+  // Just for fun: a couple hundred dummy restaurants and hotels, all shown as "Bath".
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const pick = (a) => a[Math.floor(rnd() * a.length)];
+  const foods = ["Sushi", "Taco", "Pho", "Pizza", "Ramen", "Burger", "Dim Sum", "Poke", "Curry", "Oyster", "Noodle", "Bagel"];
+  const words = ["House", "Bar", "Kitchen", "Spot", "Corner", "Garden", "Club", "Shack", "Room", "Lab"];
+  const hotels = ["Harbour", "Maple", "Pacific", "Granville", "Seawall", "Cedar", "Orca", "Mountain", "Rain City", "Lions Gate"];
+  const addrStreets = ["Robson St", "Davie St", "Granville St", "Burrard St", "Hornby St", "Howe St", "Seymour St", "Richards St", "W Georgia St", "W Pender St", "Denman St", "Hamilton St", "Mainland St", "Nelson St"];
+  for (let i = 0; raw.length < 11 + 220 && i < 5000; i++) {
+    const lat = 49.2700 + rnd() * 0.0230, lon = -123.1470 + rnd() * 0.0500;
+    if (window.vancouverLand && !window.vancouverLand([lat, lon])) continue;
+    const hotel = rnd() < 0.25;
+    const tags = hotel
+      ? { tourism: "hotel", name: `${pick(hotels)} ${pick(["Hotel", "Inn", "Suites", "Lodge"])}` }
+      : { amenity: "restaurant", name: `${pick(foods)} ${pick(words)}` };
+    tags["addr:housenumber"] = String(100 + Math.floor(rnd() * 1800));
+    tags["addr:street"] = pick(addrStreets);
+    if (rnd() < 0.3) tags.wheelchair = "yes";
+    raw.push([lat, lon, tags]);
+  }
   const places = raw.map(([lat, lon, tags], i) => ({ id: `node-${1000 + i}`, lat, lon, tags }));
   const byId = Object.fromEntries([...places, ...stores].map((p) => [p.id, p]));
   const cfg = { single: 400, pass: 299, hours: 24, boxers: 5000 };
@@ -31,12 +51,13 @@
 
   const hav = (a, b, c, d) => { const r = 6371000, t = Math.PI / 180, x = Math.sin((c - a) * t / 2) ** 2 + Math.cos(a * t) * Math.cos(c * t) * Math.sin((d - b) * t / 2) ** 2; return 2 * r * Math.asin(Math.sqrt(x)); };
   const yes = (v) => (v == null ? null : ["yes", "designated", "limited"].includes(v));
-  const kind = (t) => (t.amenity === "toilets" ? "Public restroom" : t.amenity === "pharmacy" ? "Pharmacy" : STORE_LABELS[t.shop] || LABELS[t.amenity] || "Business");
+  const kind = (t) => (t.amenity === "toilets" ? "Public restroom" : t.amenity === "restaurant" || t.tourism === "hotel" ? "Bath" : t.amenity === "pharmacy" ? "Pharmacy" : STORE_LABELS[t.shop] || LABELS[t.amenity] || "Business");
   const feats = (t) => ({ kind: kind(t), free: t.fee == null ? null : t.fee === "no", wheelchair: yes(t.wheelchair), changing_table: yes(t.changing_table), unisex: yes(t.unisex), customers_only: t.amenity !== "toilets", hours: t.opening_hours || null, category: t.shop || t.amenity === "pharmacy" ? "store" : "bathroom" });
   const hasPass = () => ent.passUntil && ent.passUntil > Date.now() / 1000;
   const canSee = (id) => (id.startsWith("node-2") ? ent.unlocked.has(id) : hasPass() || ent.unlocked.has(id));
   const nearestStores = (lat, lon) => [...stores].sort((a, b) => hav(lat, lon, a.lat, a.lon) - hav(lat, lon, b.lat, b.lon)).slice(0, 3);
-  const teaser = (p, lat, lon) => ({ id: p.id, locked: true, distance_m: Math.max(50, Math.round(hav(lat, lon, p.lat, p.lon) / 50) * 50), approx_lat: (Math.floor(p.lat / GRID) + 0.5) * GRID, approx_lon: (Math.floor(p.lon / GRID) + 0.5) * GRID, approx_radius_m: 200, ...feats(p.tags) });
+  const spread = (id, axis) => { let h = axis ? 2166136261 : 5381; for (const c of id) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0; return 0.1 + 0.8 * (h % 1000) / 1000; };
+  const teaser = (p, lat, lon) => ({ id: p.id, locked: true, distance_m: Math.max(50, Math.round(hav(lat, lon, p.lat, p.lon) / 50) * 50), approx_lat: (Math.floor(p.lat / GRID) + spread(p.id, 0)) * GRID, approx_lon: (Math.floor(p.lon / GRID) + spread(p.id, 1)) * GRID, approx_radius_m: 200, ...feats(p.tags) });
   const full = (p, lat, lon) => ({ id: p.id, locked: false, name: p.tags.name, address: `${p.tags["addr:housenumber"]} ${p.tags["addr:street"]}, Vancouver`, lat: p.lat, lon: p.lon, notes: null, ...feats(p.tags), ...(lat != null ? { distance_m: Math.round(hav(lat, lon, p.lat, p.lon)) } : {}) });
 
   const ok = (body) => new Response(JSON.stringify(body), { status: 200, headers: { "Content-Type": "application/json" } });

@@ -129,3 +129,22 @@ def test_boxers_on_their_own(client):
 
 def test_boxers_need_a_location(client):
     assert client.post("/api/checkout", json={"kind": "boxers"}).status_code == 400
+
+
+def test_restaurants_and_hotels_are_baths(monkeypatch):
+    monkeypatch.delenv("APRIETA_EVERYTHING_IS_A_BATH", raising=False)
+    assert places.kind_of({"amenity": "restaurant"}) == "Bath"
+    assert places.kind_of({"tourism": "hotel"}) == "Bath"
+    assert 'amenity"="restaurant"' in places._overpass_query(1, 2, 500)
+    monkeypatch.setenv("APRIETA_EVERYTHING_IS_A_BATH", "0")
+    assert places.kind_of({"amenity": "restaurant"}) == "Restaurant"
+    assert "restaurant" not in places._overpass_query(1, 2, 500)
+
+
+def test_locked_pins_stay_in_their_cell_and_spread_out():
+    a = places.teaser_view({"id": "node-1", "lat": 40.4170, "lon": -3.7040, "tags": {}}, *HOME)
+    b = places.teaser_view({"id": "node-2", "lat": 40.4171, "lon": -3.7041, "tags": {}}, *HOME)
+    for v in (a, b):
+        assert abs(v["approx_lat"] - 40.4170) < places.GRID_DEG and abs(v["approx_lon"] + 3.7040) < places.GRID_DEG
+    assert (a["approx_lat"], a["approx_lon"]) != (b["approx_lat"], b["approx_lon"])
+    assert a == places.teaser_view({"id": "node-1", "lat": 40.4170, "lon": -3.7040, "tags": {}}, *HOME)

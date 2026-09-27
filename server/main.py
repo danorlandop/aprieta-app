@@ -15,6 +15,7 @@ from .store import Store
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
 DEVICE_COOKIE = "aprieta_device"
 MAX_RADIUS_M = 3000
+MAX_RESULTS = 400
 
 
 class CheckoutRequest(BaseModel):
@@ -84,7 +85,7 @@ def create_app(store: Store | None = None) -> FastAPI:
             else:
                 results.append(places.teaser_view(p, lat, lon))
         results.sort(key=lambda r: r["distance_m"])
-        return {"bathrooms": results[:60], "has_pass": has_pass}
+        return {"bathrooms": results[:MAX_RESULTS], "has_pass": has_pass}
 
     @app.get("/api/stores")
     def stores(
