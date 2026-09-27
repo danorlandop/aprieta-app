@@ -20,11 +20,11 @@ class Pricing:
     @classmethod
     def from_env(cls) -> "Pricing":
         return cls(
-            single_cents=int(os.getenv("APRIETA_PRICE_SINGLE_CENTS", "99")),
+            single_cents=int(os.getenv("APRIETA_PRICE_SINGLE_CENTS", "400")),
             pass_cents=int(os.getenv("APRIETA_PRICE_PASS_CENTS", "299")),
             pass_hours=float(os.getenv("APRIETA_PASS_HOURS", "24")),
             currency=os.getenv("APRIETA_CURRENCY", "usd"),
-            boxers_cents=int(os.getenv("APRIETA_PRICE_BOXERS_CENTS", "99")),
+            boxers_cents=int(os.getenv("APRIETA_PRICE_BOXERS_CENTS", "5000")),
         )
 
     def amount(self, kind: str, boxers: bool = False) -> int:

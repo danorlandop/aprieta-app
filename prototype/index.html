@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#ff5a36">
+<meta name="theme-color" content="#6b4226">
 <title>Aprieta prototype</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 <style>/* required styles */
@@ -675,9 +675,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --ink: #1d1411;
   --ink-2: #6b5b54;
   --line: #f0e0d6;
-  --brand: #ff5a36;
+  --brand: #6b4226;
   --brand-ink: #ffffff;
-  --brand-soft: #ffe3da;
+  --brand-soft: #f0e2d4;
   --good: #1f9d63;
   --shadow: 0 10px 30px rgba(60, 20, 0, .14);
   --radius: 18px;
@@ -692,8 +692,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --ink: #fbefe9;
     --ink-2: #b9a49b;
     --line: #3a2b25;
-    --brand: #ff6b4a;
-    --brand-soft: #4a2219;
+    --brand: #c8925f;
+    --brand-soft: #3d2a1d;
     --good: #3cc486;
     --shadow: 0 10px 30px rgba(0, 0, 0, .5);
     color-scheme: dark;
@@ -787,7 +787,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   width: 100%; border: 0; border-radius: 16px; padding: 16px 20px;
   background: var(--brand); color: var(--brand-ink);
   font-size: 17px; font-weight: 700;
-  box-shadow: 0 6px 18px rgba(255, 90, 54, .35);
+  box-shadow: 0 6px 18px rgba(107, 66, 38, .35);
   transition: transform .08s;
 }
 .big-btn:active { transform: scale(.98); }
@@ -977,7 +977,7 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
 
   <header class="topbar">
     <div class="brand">
-      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#drop"/></svg>
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#toilet"/></svg>
       <span>aprieta</span>
     </div>
     <div id="pass-chip" class="chip chip-pass" hidden></div>
@@ -1098,9 +1098,11 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
   <div id="toast" class="toast" hidden role="status"></div>
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="drop" viewBox="0 0 32 32">
-      <path d="M16 2C16 2 5 14.5 5 21a11 11 0 0 0 22 0C27 14.5 16 2 16 2z" fill="currentColor"/>
-      <path d="M11 21.5a5 5 0 0 0 5 5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85"/>
+    <symbol id="toilet" viewBox="0 0 32 32">
+      <rect x="5" y="2" width="11" height="12" rx="2.5" fill="currentColor"/>
+      <rect x="3" y="14" width="26" height="3.5" rx="1.75" fill="currentColor"/>
+      <path d="M5 18.5h22c-.6 4.6-4.4 8-9 8.3L19 30H9.5l1.2-4.3C7.7 24.4 5.5 21.7 5 18.5z" fill="currentColor"/>
+      <rect x="8" y="5" width="5" height="1.8" rx=".9" fill="#fff" opacity=".85"/>
     </symbol>
   </svg>
 
@@ -1282,7 +1284,7 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
   const stores = rawStores.map(([lat, lon, tags], i) => ({ id: `node-${2000 + i}`, lat, lon, tags }));
   const places = raw.map(([lat, lon, tags], i) => ({ id: `node-${1000 + i}`, lat, lon, tags }));
   const byId = Object.fromEntries([...places, ...stores].map((p) => [p.id, p]));
-  const cfg = { single: 99, pass: 299, hours: 24, boxers: 99 };
+  const cfg = { single: 400, pass: 299, hours: 24, boxers: 5000 };
   const ent = { unlocked: new Set(), passUntil: null };
   const checkouts = {};
   const GRID = 0.0025, LABELS = { cafe: "Café", restaurant: "Restaurant", fast_food: "Fast food", fuel: "Gas station", library: "Library", community_centre: "Community centre", marketplace: "Market" };
@@ -1585,7 +1587,7 @@ a.big-btn { display: block; text-align: center; text-decoration: none; }
         </div>
         ${badges(b)}
         <div class="card-actions">
-          <button class="big-btn" data-unlock="${esc(b.id)}">Unlock address · ${money(state.config.single_cents)}</button>
+          <button class="big-btn" data-unlock="${esc(b.id)}">💩 Unlock address · ${money(state.config.single_cents)}</button>
         </div>`;
     }
     return `${head}

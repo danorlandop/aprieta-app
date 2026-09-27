@@ -23,7 +23,7 @@
   const stores = rawStores.map(([lat, lon, tags], i) => ({ id: `node-${2000 + i}`, lat, lon, tags }));
   const places = raw.map(([lat, lon, tags], i) => ({ id: `node-${1000 + i}`, lat, lon, tags }));
   const byId = Object.fromEntries([...places, ...stores].map((p) => [p.id, p]));
-  const cfg = { single: 99, pass: 299, hours: 24, boxers: 99 };
+  const cfg = { single: 400, pass: 299, hours: 24, boxers: 5000 };
   const ent = { unlocked: new Set(), passUntil: null };
   const checkouts = {};
   const GRID = 0.0025, LABELS = { cafe: "Café", restaurant: "Restaurant", fast_food: "Fast food", fuel: "Gas station", library: "Library", community_centre: "Community centre", marketplace: "Market" };

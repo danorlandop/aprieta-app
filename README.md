@@ -8,9 +8,9 @@ The exact address costs a small one-time payment.
   map each locked bathroom is a fuzzy ~200 m circle, not a pin.
 - **Paywall:** name, street address, exact pin, and a walking-directions button
   only unlock after paying. Two options:
-  - **This bathroom:** $0.99
+  - **This bathroom:** $4
   - **24-hour pass:** $2.99, every bathroom everywhere
-- **"Too late?" upsell:** on the pay screen, add backup boxers for $0.99
+- **"Too late?" upsell:** on the pay screen, add backup boxers for $50
   (the nearest shops selling underwear), or skip the bathroom and buy just that.
 - No accounts. Purchases are tied to the browser (an anonymous cookie).
 - Works as a phone web app: open it on your phone and use "Add to Home Screen".

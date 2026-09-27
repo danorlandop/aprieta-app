@@ -39,7 +39,7 @@ out = f"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#ff5a36">
+<meta name="theme-color" content="#6b4226">
 <title>Aprieta prototype</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 <style>{leaflet_css}</style>

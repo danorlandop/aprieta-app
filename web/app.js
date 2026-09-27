@@ -233,7 +233,7 @@
         </div>
         ${badges(b)}
         <div class="card-actions">
-          <button class="big-btn" data-unlock="${esc(b.id)}">Unlock address · ${money(state.config.single_cents)}</button>
+          <button class="big-btn" data-unlock="${esc(b.id)}">💩 Unlock address · ${money(state.config.single_cents)}</button>
         </div>`;
     }
     return `${head}

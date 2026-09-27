@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#ff5a36">
+  <meta name="theme-color" content="#6b4226">
   <title>Aprieta</title>
   <meta name="description" content="Find the nearest bathroom, fast.">
   <link rel="manifest" href="manifest.json">
@@ -15,7 +15,7 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#drop"/></svg>
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#toilet"/></svg>
       <span>aprieta</span>
     </div>
     <div id="pass-chip" class="chip chip-pass" hidden></div>
@@ -135,9 +135,11 @@
   <div id="toast" class="toast" hidden role="status"></div>
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="drop" viewBox="0 0 32 32">
-      <path d="M16 2C16 2 5 14.5 5 21a11 11 0 0 0 22 0C27 14.5 16 2 16 2z" fill="currentColor"/>
-      <path d="M11 21.5a5 5 0 0 0 5 5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85"/>
+    <symbol id="toilet" viewBox="0 0 32 32">
+      <rect x="5" y="2" width="11" height="12" rx="2.5" fill="currentColor"/>
+      <rect x="3" y="14" width="26" height="3.5" rx="1.75" fill="currentColor"/>
+      <path d="M5 18.5h22c-.6 4.6-4.4 8-9 8.3L19 30H9.5l1.2-4.3C7.7 24.4 5.5 21.7 5 18.5z" fill="currentColor"/>
+      <rect x="8" y="5" width="5" height="1.8" rx=".9" fill="#fff" opacity=".85"/>
     </symbol>
   </svg>
 

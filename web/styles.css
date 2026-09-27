@@ -5,9 +5,9 @@
   --ink: #1d1411;
   --ink-2: #6b5b54;
   --line: #f0e0d6;
-  --brand: #ff5a36;
+  --brand: #6b4226;
   --brand-ink: #ffffff;
-  --brand-soft: #ffe3da;
+  --brand-soft: #f0e2d4;
   --good: #1f9d63;
   --shadow: 0 10px 30px rgba(60, 20, 0, .14);
   --radius: 18px;
@@ -22,8 +22,8 @@
     --ink: #fbefe9;
     --ink-2: #b9a49b;
     --line: #3a2b25;
-    --brand: #ff6b4a;
-    --brand-soft: #4a2219;
+    --brand: #c8925f;
+    --brand-soft: #3d2a1d;
     --good: #3cc486;
     --shadow: 0 10px 30px rgba(0, 0, 0, .5);
     color-scheme: dark;
@@ -117,7 +117,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   width: 100%; border: 0; border-radius: 16px; padding: 16px 20px;
   background: var(--brand); color: var(--brand-ink);
   font-size: 17px; font-weight: 700;
-  box-shadow: 0 6px 18px rgba(255, 90, 54, .35);
+  box-shadow: 0 6px 18px rgba(107, 66, 38, .35);
   transition: transform .08s;
 }
 .big-btn:active { transform: scale(.98); }

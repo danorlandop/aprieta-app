@@ -115,7 +115,7 @@ def test_boxer_shops_are_locked_and_not_covered_by_the_pass(client):
 def test_boxers_addon_unlocks_bathroom_and_shops(client):
     nearby(client)
     res = client.post("/api/checkout", json={"kind": "single", "place_id": "node-1", "boxers": True, "lat": HOME[0], "lon": HOME[1]}).json()
-    assert res["amount_cents"] == 99 + 99
+    assert res["amount_cents"] == 400 + 5000
     assert client.post("/api/checkout/confirm", json={"session_id": res["checkout_id"]}).json()["boxers"] is True
     assert {x["name"] for x in stores(client)} == {"Farmacia Luna", "Ropa Rápida"}
     assert client.get("/api/bathrooms/node-1").status_code == 200
